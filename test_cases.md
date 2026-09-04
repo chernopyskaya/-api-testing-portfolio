@@ -1,14 +1,54 @@
-## 🧪 API Test Results Summary
+# API Test Cases
 
-### 🚚 Fast Delivery Service (`POST /fast-delivery/v3.1.1/calculate-delivery.xml`)
-| ID | Scenario | Input Params | Expected Result | Status | Notes |
-|:---|:---|:---|:---|:---:|:---|
-| 28 | Delivery cost & possibility check | `weight:2, time:10, count:1` | `hostCost:23, clientCost:0, possible:true` | ✅ | 200 OK |
-| 29 | Delivery cost & possibility check | `weight:2, time:10, count:2` | `hostCost:23, clientCost:0, possible:true` | ✅ | 200 OK |
-| 30 | Delivery cost & possibility check | `weight:2, time:10, count:5` | `hostCost:23, clientCost:0, possible:true` | ✅ | 200 OK |
+## Добавление продуктов в набор
 
-### 🗑️ Cart Management (`DELETE /api/v1/orders/:id`)
-| ID | Scenario | Expected Result | Status | Notes |
-|:---|:---|:---|:---:|:---|
-| 106 | Delete existing cart | 200 OK, Cart is removed | ❌ | **FAILED** (BR-34): Cart not deleted |
-| 107 | Delete non-existent cart | 404 Not Found | ✅ | 404 Not Found |
+**Endpoint:** `POST /api/v1/kits/{id}/products`  
+**Параметр запроса:** `quantity` в теле запроса
+
+| № | Описание | ОР | Статус | Ссылка на баг-репорт |
+|---|---|---|---|---|
+| 13 | Продукты не добавятся в набор, если в `quantity = -1` | Код и статус ответа: `400 Bad Request` | ❌ FAILED | BR-1 |
+| | | Ошибок в структуре ответа нет | ✅PASSED | |
+| | | Продукты в набор не добавлены | ❌ FAILED | BR-1 |
+| 14 | Продукты не добавятся в набор, если в `quantity = 0` | Код и статус ответа: `400 Bad Request` | ❌ FAILED | BR-2 |
+| | | Ошибок в структуре ответа нет | ✅PASSED | |
+| | | Продукты в набор не добавлены | ❌ FAILED | BR-2 |
+| 15 | Продукты не добавятся в набор, если `quantity = null` | Код и статус ответа: `400 Bad Request` | ❌ FAILED | BR-3 |
+| | | Ошибок в структуре ответа нет | ✅PASSED | |
+| | | Продукты в набор не добавлены | ❌ FAILED | BR-3 |
+
+---
+
+## Получение списка продуктов, которые добавили в корзину
+
+**Endpoint:** `GET /api/v1/orders/:id`
+
+| № | Описание | ОР | Статус | Ссылка на баг-репорт |
+|---|---|---|---|---|
+| 82 | Успешное получение списка продуктов в корзине при существующем id корзины | Код и статус ответа: `200 OK` | ✅PASSED | |
+| | | Ошибок в структуре ответа нет |✅PASSED | |
+| | | Получен список продуктов в корзине | ✅PASSED | |
+| 83 | Отсутствие списка продуктов в корзине при несуществующем id | Код и статус ответа: `404 Not Found` | ✅PASSED | |
+| | | Ошибок в структуре ответа нет | ✅PASSED | |
+| | | Не получен список продуктов в корзине | ✅PASSED | |
+
+---
+
+## Удаление корзины
+
+**Endpoint:** `DELETE /api/v1/orders/:id`
+
+| № | Описание | ОР | Статус | Ссылка на баг-репорт |
+|---|---|---|---|---|
+| 106 | Успешное удаление корзины при существующем id | Код и статус ответа: `200 OK` | ❌ FAILED | BR-34 |
+| | | Ошибок в структуре ответа нет |✅PASSED | |
+| | | Корзина удалена | ❌ FAILED | BR-34 |
+| 107 | Ошибка в удалении корзины при несуществующем id | Код и статус ответа: `404 Not Found` |✅PASSED | |
+| | | Ошибок в структуре ответа нет |✅PASSED | |
+| | | Корзина не удалена |✅PASSED | |
+
+---
+
+
+
+
